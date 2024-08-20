@@ -1,14 +1,15 @@
 use anyhow::Result;
 use axum::{
-    extract::Multipart,
+    extract::{DefaultBodyLimit, Multipart},
     response::Html,
     routing::{get, post},
     Router,
 };
+use log::{error, info};
 use openfoodfacts as off;
 use serde_json::{json, Value};
-use std::sync::Arc;
 use std::collections::HashMap;
+use std::sync::Arc;
 use tokio::io::AsyncWriteExt;
 use tower_http::cors::{Any, CorsLayer};
 
@@ -26,18 +27,21 @@ fn create_nutrional_facts_file(file_name: &str) -> Result<String> {
     let protein_per = &result_json["product"]["nutriments"]["proteins_serving"];
     let fats_per = &result_json["product"]["nutriments"]["fat_serving"];
     Ok(format!(
-         "<img src={selected_image} width=25% height=auto>
+        "<img src={selected_image} width=25% height=auto>
          <h1><b>Tamaño de serving</b>: {serving_size}<br>
     <b>Valores nutricionales (por serving)</b>:<br>
     <b>Calorías (kcal)</b>: {calories_per}<br>
-    <b>Carbos: {carbs_per}g</b><br>
-    <b>Proteína: {protein_per}g</b><br>
-    <b>Grasa: {fats_per}g</b></h1>"
+    <b>Carbohidratos</b>: {carbs_per}g<br>
+    <b>Proteína</b>: {protein_per}<br>
+    <b>Grasa</b>: {fats_per}g</h1>"
     ))
 }
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .init();
     let cors = CorsLayer::new()
         .allow_origin(Any)
         .allow_headers(Any)
@@ -45,15 +49,20 @@ async fn main() -> Result<()> {
     let app = Router::new()
         .route("/", get(root))
         .route("/sanity", get(sanity_check))
+        // Set the upload limit to 10mb (this will be loaded into memory)
         .route("/upload", post(upload))
+        .layer(DefaultBodyLimit::max(100 * 100 * 1000))
         .layer(cors);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
-    axum::serve(listener, app.into_make_service()).await.unwrap();
+    axum::serve(listener, app.into_make_service())
+        .await
+        .unwrap();
 
     Ok(())
 }
 async fn root() -> Html<&'static str> {
+    info!("Got request to /");
     Html(
         r#"
 <!DOCTYPE html>
@@ -94,10 +103,11 @@ async fn root() -> Html<&'static str> {
     )
 }
 async fn sanity_check() -> &'static str {
+    info!("Got request to sanity check");
     "Server is up and runnning!\n"
 }
-// This function is not working even though the file is saved correctly
 async fn upload(mut multipart: Multipart) -> Html<String> {
+    info!("Got upload request");
     let mut file_name = String::new();
     let mut file_data = Vec::new();
 
@@ -107,6 +117,7 @@ async fn upload(mut multipart: Multipart) -> Html<String> {
         let data = field.bytes().await.unwrap();
 
         if !content_type.starts_with("image/") {
+            error!("The uploader did not sent an image");
             return Html("<p>Please upload only images.</p>".to_string());
         }
 
@@ -114,7 +125,6 @@ async fn upload(mut multipart: Multipart) -> Html<String> {
         file_data = data.to_vec();
     }
     let file_name_with_extension = Arc::new(String::from(file_name));
-    println!("{}", file_name_with_extension);
     let file_name_with_extension_clone = file_name_with_extension.clone();
     let file_name_with_extension_clone_2 = file_name_with_extension.clone();
     let mut file = tokio::fs::File::create(file_name_with_extension.as_str())
@@ -125,10 +135,10 @@ async fn upload(mut multipart: Multipart) -> Html<String> {
         .expect("file creation failed");
     let response = tokio::task::spawn_blocking(move || {
         let file_name = file_name_with_extension_clone.as_str();
-        println!("{}", file_name);
-        create_nutrional_facts_file(file_name).unwrap_or(String::from(
-            "could not read file, make sure it is a valid image!",
-        ))
+        create_nutrional_facts_file(file_name).unwrap_or_else(|_| {
+            error!("Could not read the image");
+            String::from("could not read file, make sure it is a valid image!")
+        })
     })
     .await
     .unwrap();

@@ -27,12 +27,12 @@ fn create_nutrional_facts_file(file_name: &str) -> Result<String> {
     let fats_per = &result_json["product"]["nutriments"]["fat_serving"];
     Ok(format!(
          "<img src={selected_image}>
-         <h1>Tamaño de serving: {serving_size}<br>
-    Valores nutricionales (por serving):<br>
-    Calorías (kcal): {calories_per}<br>
-    Carbos: {carbs_per}g<br>
-    Proteína: {protein_per}g<br>
-    Grasa: {fats_per}g</h1>"
+         <h1><b>Tamaño de serving</b>: {serving_size}<br>
+    <b>Valores nutricionales (por serving)</b>:<br>
+    <b>Calorías (kcal)</b>: {calories_per}<br>
+    <b>Carbos: {carbs_per}g</b><br>
+    <b>Proteína: {protein_per}g</b><br>
+    <b>Grasa: {fats_per}g</b></h1>"
     ))
 }
 
@@ -56,14 +56,12 @@ async fn main() -> Result<()> {
 async fn root() -> Html<&'static str> {
     Html(
         r#"
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="author" content="Pirson Bethancourt" />
-      <meta name="viewport" content="width=69px" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pana Fit Prototype</title>
   <script src="https://unpkg.com/htmx.org@2.0.2"></script>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -71,8 +69,8 @@ async fn root() -> Html<&'static str> {
 </head>
 <body class="bg-[#282828] text-[#ebdbb2] font-sans p-4 sm:p-8 flex items-center justify-center min-h-screen">
 
-  <div class="bg-[#3c3836] p-6 sm:p-8 md:p-12 rounded-lg shadow-md w-full max-w-xs sm:max-w-md">
-    <form id="form" hx-encoding="multipart/form-data" hx-post="/upload" hx-swap="afterend swap:1s" class="space-y-4">
+  <div class="bg-[#3c3836] p-6 sm:p-8 md:p-12 rounded-lg shadow-md w-full max-w-xl h-auto min-h-[70vh] flex flex-col justify-between">
+    <form id="form" hx-encoding="multipart/form-data" hx-post="/upload" hx-swap="afterend swap:1s" class="space-y-4 flex-grow">
       <div>
         <label for="file" class="block text-sm font-medium text-[#d5c4a1]">Upload Image</label>
         <input type="file" name="file" id="file" class="mt-2 block w-full text-sm text-[#ebdbb2] border border-[#504945] rounded-lg cursor-pointer bg-[#282828] focus:outline-none focus:ring-2 focus:ring-[#b8bb26] focus:border-[#b8bb26]">
@@ -82,6 +80,10 @@ async fn root() -> Html<&'static str> {
       </button>
       <progress id="progress" value="0" max="100" class="w-full h-2 rounded-full overflow-hidden bg-[#504945]"></progress>
     </form>
+    <!-- Placeholder for uploaded image and text -->
+    <div id="uploadedContent" class="mt-4">
+      <!-- Content from uploaded image processing will appear here -->
+    </div>
   </div>
 
   <script>
@@ -91,6 +93,7 @@ async fn root() -> Html<&'static str> {
   </script>
 </body>
 </html>
+
     "#,
     )
 }

@@ -56,19 +56,21 @@ async fn main() -> Result<()> {
 async fn root() -> Html<&'static str> {
     Html(
         r#"
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="author" content="Pirson Bethancourt" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pana Fit Prototype</title>
   <script src="https://unpkg.com/htmx.org@2.0.2"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="index.css">
 </head>
-<body class="bg-[#282828] text-[#ebdbb2] font-sans p-8 flex items-center justify-center min-h-screen">
+<body class="bg-[#282828] text-[#ebdbb2] font-sans p-4 sm:p-8 flex items-center justify-center min-h-screen">
 
-  <div class="bg-[#3c3836] p-12 rounded-lg shadow-md w-full max-w-md">
+  <div class="bg-[#3c3836] p-8 sm:p-12 rounded-lg shadow-md w-full max-w-md">
     <form id="form" hx-encoding="multipart/form-data" hx-post="/upload" hx-swap="afterend swap:1s" class="space-y-4">
       <div>
         <label for="file" class="block text-sm font-medium text-[#d5c4a1]">Upload Image</label>
@@ -88,6 +90,7 @@ async fn root() -> Html<&'static str> {
   </script>
 </body>
 </html>
+
     "#,
     )
 }

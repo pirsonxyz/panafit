@@ -63,7 +63,7 @@ async fn root() -> Html<&'static str> {
 <head>
   <meta charset="UTF-8" />
   <meta name="author" content="Pirson Bethancourt" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="viewport" content="width=69px" />
   <title>Pana Fit Prototype</title>
   <script src="https://unpkg.com/htmx.org@2.0.2"></script>
   <script src="https://cdn.tailwindcss.com"></script>

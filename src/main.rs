@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{Context, Result};
 use axum::{
     extract::{DefaultBodyLimit, Multipart},
     response::Html,
@@ -74,7 +74,6 @@ async fn root() -> Html<&'static str> {
   <title>Pana Fit Prototype</title>
   <script src="https://unpkg.com/htmx.org@2.0.2"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="index.css">
 </head>
 <body class="bg-[#282828] text-[#ebdbb2] font-sans p-4 sm:p-8 flex items-center justify-center min-h-screen">
 
@@ -132,7 +131,7 @@ async fn upload(mut multipart: Multipart) -> Html<String> {
         .unwrap();
     file.write_all(&file_data)
         .await
-        .expect("file creation failed");
+        .with_context(|| format!("Failed to create file")).unwrap();
     let response = tokio::task::spawn_blocking(move || {
         let file_name = file_name_with_extension_clone.as_str();
         create_nutrional_facts_file(file_name).unwrap_or_else(|_| {

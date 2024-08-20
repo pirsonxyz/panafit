@@ -26,7 +26,7 @@ fn create_nutrional_facts_file(file_name: &str) -> Result<String> {
     let protein_per = &result_json["product"]["nutriments"]["proteins_serving"];
     let fats_per = &result_json["product"]["nutriments"]["fat_serving"];
     Ok(format!(
-         "<img src={selected_image}>
+         "<img src={selected_image} width=200 height=250>
          <h1><b>Tamaño de serving</b>: {serving_size}<br>
     <b>Valores nutricionales (por serving)</b>:<br>
     <b>Calorías (kcal)</b>: {calories_per}<br>

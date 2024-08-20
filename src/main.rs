@@ -69,7 +69,7 @@ async fn root() -> Html<&'static str> {
 </head>
 <body class="bg-[#282828] text-[#ebdbb2] font-sans p-4 sm:p-8 flex items-center justify-center min-h-screen">
 
-  <div class="bg-[#3c3836] p-6 sm:p-8 md:p-12 rounded-lg shadow-md w-full max-w-xl h-auto min-h-[70vh] flex flex-col justify-between">
+  <div class="bg-[#3c3836] p-6 sm:p-8 md:p-12 rounded-lg shadow-md w-full max-w-4xl h-[80vh] flex flex-col justify-between">
     <form id="form" hx-encoding="multipart/form-data" hx-post="/upload" hx-swap="afterend swap:1s" class="space-y-4 flex-grow">
       <div>
         <label for="file" class="block text-sm font-medium text-[#d5c4a1]">Upload Image</label>

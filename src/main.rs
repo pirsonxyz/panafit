@@ -131,7 +131,8 @@ async fn upload(mut multipart: Multipart) -> Html<String> {
         .unwrap();
     file.write_all(&file_data)
         .await
-        .with_context(|| format!("Failed to create file")).unwrap();
+        .with_context(|| format!("Failed to create file"))
+        .unwrap();
     let response = tokio::task::spawn_blocking(move || {
         let file_name = file_name_with_extension_clone.as_str();
         create_nutrional_facts_file(file_name).unwrap_or_else(|_| {

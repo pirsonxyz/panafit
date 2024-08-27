@@ -12,6 +12,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::io::AsyncWriteExt;
 use tower_http::cors::{Any, CorsLayer};
+use tower_http::services::ServeFile;
 
 fn create_nutrional_facts_file(file_name: &str) -> Result<String> {
     let client = off::v2().build()?;
@@ -51,10 +52,12 @@ async fn main() -> Result<()> {
         .route("/sanity", get(sanity_check))
         // Set the upload limit to 10mb (this will be loaded into memory)
         .route("/upload", post(upload))
+        .route_service("/pepe", ServeFile::new("pepe.png"))
         .layer(DefaultBodyLimit::max(100 * 100 * 1000))
         .layer(cors);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
+    println!("Listening on: {}", listener.local_addr()?);
     axum::serve(listener, app.into_make_service())
         .await
         .unwrap();
@@ -71,6 +74,7 @@ async fn root() -> Html<&'static str> {
   <meta charset="UTF-8" />
   <meta name="author" content="Pirson Bethancourt" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/pepe"></link>
   <title>Pana Fit Prototype</title>
   <script src="https://unpkg.com/htmx.org@2.0.2"></script>
   <script src="https://cdn.tailwindcss.com"></script>

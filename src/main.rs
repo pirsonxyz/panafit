@@ -68,39 +68,39 @@ async fn root() -> Html<&'static str> {
     info!("Got request to /");
     Html(
         r#"
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="author" content="Pirson Bethancourt" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/png" href="/pepe"></link>
-  <title>Pana Fit Prototype</title>
-  <script src="https://unpkg.com/htmx.org@2.0.2"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-[#1f2335] text-[#c0caf5] font-sans p-4 sm:p-8 flex items-center justify-center min-h-screen">
-
-  <div class="bg-[#24283b] p-6 sm:p-8 md:p-12 rounded-lg shadow-md w-full max-w-4xl h-[80vh] flex flex-col justify-between">
-    <form id="form" hx-encoding="multipart/form-data" hx-post="/upload" hx-swap="afterend swap:1s" class="space-y-4 flex-grow">
-      <div>
-        <label for="file" class="block text-sm font-medium text-[#c0caf5]">Upload Image</label>
-        <input type="file" name="file" id="file" class="mt-2 block w-full text-sm text-[#c0caf5] border border-[#c0caf5] rounded-lg cursor-pointer bg-[#292e42] focus:outline-none focus:ring-2 focus:ring-[#3d59a1] focus:border-[#3d59a1]">
-      </div>
-      <button type="submit" class="w-full py-2 px-4 bg-[#ff9e64] text-[#282828] font-semibold rounded-full shadow-md hover:bg-[#ffc777] focus:outline-none focus:ring-2 focus:ring-[#ffc777] focus:ring-offset-2">
-        Upload
-      </button>
-      <progress id="progress" value="0" max="100" class="w-full h-2 rounded-full overflow-hidden bg-[#bb9af7]"></progress>
-    </form>
-  </div>
-
-  <script>
-    htmx.on('#form', 'htmx:xhr:progress', function(evt) {
-      htmx.find('#progress').setAttribute('value', evt.detail.loaded / evt.detail.total * 100);
-    });
-  </script>
-</body>
-</html>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="author" content="Pirson Bethancourt" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <link rel="icon" type="image/png" href="/pepe"></link>
+          <title>Pana Fit Prototype</title>
+          <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+          <script src="https://cdn.tailwindcss.com"></script>
+        </head>
+        <body class="bg-[#1f2335] text-[#c0caf5] font-sans p-4 sm:p-8 flex items-center justify-center min-h-screen">
+        
+          <div class="bg-[#24283b] p-6 sm:p-8 md:p-12 rounded-lg shadow-md w-full max-w-4xl h-[80vh] flex flex-col justify-between">
+            <form id="form" hx-encoding="multipart/form-data" hx-post="/upload" hx-swap="afterend swap:1s" class="space-y-4 flex-grow">
+              <div>
+                <label for="file" class="block text-sm font-medium text-[#c0caf5]">Upload Image</label>
+                <input type="file" name="file" id="file" class="mt-2 block w-full text-sm text-[#c0caf5] border border-[#c0caf5] rounded-lg cursor-pointer bg-[#292e42] focus:outline-none focus:ring-2 focus:ring-[#3d59a1] focus:border-[#3d59a1]">
+              </div>
+              <button type="submit" class="w-full py-2 px-4 bg-[#ff9e64] text-[#282828] font-semibold rounded-full shadow-md hover:bg-[#ffc777] focus:outline-none focus:ring-2 focus:ring-[#ffc777] focus:ring-offset-2">
+                Upload
+              </button>
+              <progress id="progress" value="0" max="100" class="w-full h-2 rounded-full overflow-hidden bg-[#bb9af7]"></progress>
+            </form>
+          </div>
+        
+          <script>
+            htmx.on('#form', 'htmx:xhr:progress', function(evt) {
+              htmx.find('#progress').setAttribute('value', evt.detail.loaded / evt.detail.total * 100);
+            });
+          </script>
+        </body>
+    </html>
     "#,
     )
 }

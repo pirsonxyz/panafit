@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 openfoodfacts = { git = "https://github.com/openfoodfacts/openfoodfacts-rust.git" }
 axum = { version = "0.7.5", features = ["multipart"] }
-reqwest = { version = "0.11", features = ["blocking", "json"] }
+reqwest = { version = "0.12.7", features = ["blocking", "json"] }
 tokio = { version = "1.39.3", features = ["full"] }
 tower-http = { version = "0.5.2", features = ["cors", "fs", "trace"] }
 anyhow = "1.0.86"

@@ -101,7 +101,6 @@ async fn root() -> Html<&'static str> {
   </script>
 </body>
 </html>
-
     "#,
     )
 }

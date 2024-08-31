@@ -78,7 +78,7 @@ async fn root() -> Html<&'static str> {
           <meta property="og:type" content="website"/>
           <meta property="og:url" content="https://panafit-production.up.railway.app/"/>
           <meta property="og:image" content="https://panafit-production.up.railway.app/pepe"/>
-          <meta property="og:description" content="A website to view the calories of diferent foods, free!"/>
+          <meta property="og:description" content="View the calories of different foods, free!"/>
           <link rel="icon" type="image/png" href="/pepe"></link>
           <title>Pana Fit Prototype</title>
           <script src="https://unpkg.com/htmx.org@2.0.2"></script>

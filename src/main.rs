@@ -57,7 +57,7 @@ async fn main() -> Result<()> {
         .layer(cors);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
-    println!("Listening on: {}", listener.local_addr()?);
+    println!("Listening on: http://{}", listener.local_addr()?);
     axum::serve(listener, app.into_make_service())
         .await
         .unwrap();

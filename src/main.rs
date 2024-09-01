@@ -113,6 +113,7 @@ async fn sanity_check() -> &'static str {
     info!("Got request to sanity check");
     "Server is up and runnning!\n"
 }
+
 async fn upload(mut multipart: Multipart) -> Html<String> {
     info!("Got upload request");
     let mut file_name = String::new();
@@ -122,7 +123,6 @@ async fn upload(mut multipart: Multipart) -> Html<String> {
         let fname = field.file_name().unwrap().to_string();
         let content_type = field.content_type().unwrap().to_string();
         let data = field.bytes().await.unwrap();
-
         if !content_type.starts_with("image/") {
             error!("The uploader did not sent an image");
             return Html("<p>Please upload only images.</p>".to_string());

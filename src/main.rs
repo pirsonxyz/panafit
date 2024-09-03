@@ -8,8 +8,8 @@ use axum::{
 use log::{error, info};
 use openfoodfacts as off;
 use serde_json::{json, Value};
-use std::collections::HashMap;
 use std::sync::Arc;
+use std::{collections::HashMap, fs};
 use tokio::io::AsyncWriteExt;
 use tower_http::cors::{Any, CorsLayer};
 use tower_http::services::ServeFile;
@@ -21,6 +21,7 @@ fn create_nutrional_facts_file(file_name: &str) -> Result<String> {
     let code = bar_code_text;
     let response = client.product(code, None).unwrap();
     let result_json = json!(response.json::<HashMap::<String, Value>>()?);
+    fs::write("res.json", &result_json.to_string())?;
     let selected_image = &result_json["product"]["selected_images"]["front"]["display"]["en"];
     let serving_size = &result_json["product"]["serving_size"];
     let calories_per = &result_json["product"]["nutriments"]["energy-kcal_serving"];
@@ -109,6 +110,7 @@ async fn root() -> Html<&'static str> {
     "#,
     )
 }
+
 async fn sanity_check() -> &'static str {
     info!("Got request to sanity check");
     "Server is up and runnning!\n"
